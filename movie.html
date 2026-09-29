@@ -100,9 +100,13 @@
 
                         <span id="movieDate">Release date pending</span>
 
-                        <span id="movieGenres">Genres pending</span>
+                        <span id="movieRuntime">Runtime pending</span>
+
+                        <span id="movieVoteCount" hidden></span>
 
                     </div>
+
+                    <div class="movie-genre-list" id="movieGenres" aria-label="Genres"></div>
 
 
                     <p id="movieOverview">Loading movie information...</p>
@@ -125,6 +129,56 @@
                 </div>
 
             </div>
+
+            <section class="movie-extra-section movie-cast-section" id="movieCastSection" hidden aria-labelledby="movieCastTitle">
+                <div class="movie-extra-heading">
+                    <p class="movie-details-kicker">THE PEOPLE BEHIND THE STORY</p>
+                    <h2 id="movieCastTitle">Cast</h2>
+                </div>
+                <div class="movie-cast-list" id="movieCastList"></div>
+            </section>
+
+            <div class="movie-production-row">
+                <section class="movie-extra-section movie-director-field" id="movieDirectorField" hidden aria-labelledby="movieDirectorTitle">
+                    <p class="movie-details-kicker" id="movieDirectorTitle">DIRECTOR</p>
+                    <p class="movie-director-name" id="movieDirector"></p>
+                </section>
+
+                <section class="movie-extra-section movie-companies-section" id="productionCompaniesSection" hidden aria-labelledby="productionCompaniesTitle">
+                    <div class="movie-extra-heading">
+                        <p class="movie-details-kicker">PRODUCTION</p>
+                        <h2 id="productionCompaniesTitle">Production Companies</h2>
+                    </div>
+                    <div class="production-company-list" id="productionCompaniesList"></div>
+                </section>
+            </div>
+
+            <section class="movie-extra-section movie-trailer-section" id="movieTrailerSection" hidden aria-labelledby="movieTrailerTitle">
+                <div class="movie-trailer-heading">
+                    <div class="movie-extra-heading">
+                        <p class="movie-details-kicker">PREVIEW</p>
+                        <h2 id="movieTrailerTitle">Trailer</h2>
+                    </div>
+                    <button class="movie-trailer-button" id="movieTrailerButton" type="button">
+                        <span aria-hidden="true">▶</span> Watch Trailer
+                    </button>
+                </div>
+            </section>
+
+            <dialog class="movie-trailer-dialog" id="movieTrailerDialog" aria-label="Movie trailer">
+                <div class="movie-trailer-dialog-header">
+                    <span>Trailer</span>
+                    <button id="movieTrailerClose" type="button" aria-label="Close trailer">Close</button>
+                </div>
+                <div class="movie-trailer-frame">
+                    <iframe
+                        id="movieTrailerFrame"
+                        title="Movie trailer"
+                        allow="autoplay; encrypted-media; picture-in-picture; fullscreen"
+                        referrerpolicy="strict-origin-when-cross-origin"
+                    ></iframe>
+                </div>
+            </dialog>
 
             <section class="movie-recommendations" id="movieRecommendationsSection" hidden aria-labelledby="movieRecommendationsTitle">
                 <div class="movie-recommendations-heading">

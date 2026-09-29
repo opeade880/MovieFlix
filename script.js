@@ -1727,6 +1727,216 @@ async function loadMovieDetailRecommendations(movie) {
     }
 }
 
+function formatMovieRuntime(runtime) {
+    const minutes = Number(runtime);
+    if (!Number.isFinite(minutes) || minutes <= 0) return "Runtime unavailable";
+    const hours = Math.floor(minutes / 60);
+    const remainingMinutes = Math.round(minutes % 60);
+    return hours ? `${hours}h ${remainingMinutes}m` : `${remainingMinutes}m`;
+}
+
+function formatMovieReleaseDate(releaseDate) {
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(String(releaseDate || ""))) {
+        return releaseDate || "Release date unavailable";
+    }
+    const date = new Date(`${releaseDate}T00:00:00`);
+    return Number.isNaN(date.getTime())
+        ? releaseDate
+        : new Intl.DateTimeFormat("en-US", { month: "long", day: "numeric", year: "numeric" }).format(date);
+}
+
+async function getTmdbMovieExtra(movieId, resource) {
+    const safeMovieId = String(movieId || "").match(/^\d+$/)?.[0];
+    if (!safeMovieId || !["credits", "videos"].includes(resource)) {
+        throw new Error("A valid movie ID and TMDB movie resource are required.");
+    }
+    const params = new URLSearchParams({ api_key: API_KEY, language: "en-US" });
+    const response = await fetch(`${API_URL}/movie/${safeMovieId}/${resource}?${params.toString()}`);
+    if (!response.ok) {
+        throw new Error(`TMDB ${resource} request failed with status ${response.status}.`);
+    }
+    return response.json();
+}
+
+function renderMovieCredits(credits) {
+    const castSection = document.getElementById("movieCastSection");
+    const castList = document.getElementById("movieCastList");
+    const directorField = document.getElementById("movieDirectorField");
+    const directorName = document.getElementById("movieDirector");
+    if (!castSection || !castList || !directorField || !directorName) return;
+
+    const cast = (Array.isArray(credits?.cast) ? credits.cast : [])
+        .filter(person => person?.name && person?.character)
+        .slice(0, 8);
+    castList.replaceChildren();
+
+    cast.forEach(person => {
+        const card = document.createElement("article");
+        const imageFrame = document.createElement("div");
+        const name = document.createElement("h3");
+        const character = document.createElement("p");
+
+        card.className = "movie-cast-card";
+        imageFrame.className = "movie-cast-image";
+        name.textContent = person.name;
+        character.textContent = person.character;
+
+        if (person.profile_path) {
+            const image = document.createElement("img");
+            image.src = `https://image.tmdb.org/t/p/w185${person.profile_path}`;
+            image.alt = `${person.name} as ${person.character}`;
+            image.loading = "lazy";
+            image.addEventListener("error", () => {
+                imageFrame.replaceChildren(createCastPlaceholder(person.name));
+            }, { once: true });
+            imageFrame.appendChild(image);
+        } else {
+            imageFrame.appendChild(createCastPlaceholder(person.name));
+        }
+
+        card.append(imageFrame, name, character);
+        castList.appendChild(card);
+    });
+    castSection.hidden = cast.length === 0;
+
+    const director = (Array.isArray(credits?.crew) ? credits.crew : [])
+        .find(person => person?.job === "Director" && person?.name);
+    if (director) {
+        directorName.textContent = director.name;
+        directorField.hidden = false;
+    } else {
+        directorName.textContent = "";
+        directorField.hidden = true;
+    }
+}
+
+function createCastPlaceholder(name) {
+    const placeholder = document.createElement("div");
+    const initials = String(name || "?")
+        .trim()
+        .split(/\s+/)
+        .slice(0, 2)
+        .map(part => part.charAt(0))
+        .join("")
+        .toUpperCase();
+    placeholder.className = "movie-cast-placeholder";
+    placeholder.setAttribute("aria-label", `No profile image for ${name || "cast member"}`);
+    placeholder.textContent = initials || "?";
+    return placeholder;
+}
+
+function renderProductionCompanies(companies) {
+    const section = document.getElementById("productionCompaniesSection");
+    const list = document.getElementById("productionCompaniesList");
+    if (!section || !list) return;
+
+    const validCompanies = (Array.isArray(companies) ? companies : [])
+        .filter(company => company?.name)
+        .slice(0, 6);
+    list.replaceChildren();
+
+    validCompanies.forEach(company => {
+        const item = document.createElement("div");
+        const name = document.createElement("span");
+        item.className = "production-company";
+        name.className = "production-company-name";
+        name.textContent = company.name;
+
+        if (company.logo_path) {
+            const logo = document.createElement("img");
+            logo.src = `https://image.tmdb.org/t/p/w300${company.logo_path}`;
+            logo.alt = `${company.name} logo`;
+            logo.loading = "lazy";
+            logo.addEventListener("error", () => {
+                logo.remove();
+                item.classList.add("has-no-logo");
+            }, { once: true });
+            item.appendChild(logo);
+        } else {
+            item.classList.add("has-no-logo");
+        }
+
+        item.appendChild(name);
+        list.appendChild(item);
+    });
+    section.hidden = validCompanies.length === 0;
+}
+
+function getBestMovieTrailer(videos) {
+    const candidates = (Array.isArray(videos) ? videos : [])
+        .filter(video => video?.key
+            && ["Trailer", "Teaser"].includes(video.type)
+            && ["YouTube", "Vimeo"].includes(video.site));
+
+    for (const type of ["Trailer", "Teaser"]) {
+        for (const site of ["YouTube", "Vimeo"]) {
+            const matches = candidates.filter(video => video.type === type && video.site === site);
+            matches.sort((left, right) => {
+                const officialScore = video => (video.official ? 2 : 0) + (/\bofficial\b/i.test(video.name || "") ? 1 : 0);
+                return officialScore(right) - officialScore(left);
+            });
+            if (matches.length) return matches[0];
+        }
+    }
+    return null;
+}
+
+function renderMovieTrailer(videos) {
+    const section = document.getElementById("movieTrailerSection");
+    const button = document.getElementById("movieTrailerButton");
+    const dialog = document.getElementById("movieTrailerDialog");
+    const frame = document.getElementById("movieTrailerFrame");
+    const closeButton = document.getElementById("movieTrailerClose");
+    const trailer = getBestMovieTrailer(videos);
+    if (!section || !button || !dialog || !frame || !closeButton || !trailer) {
+        if (section) section.hidden = true;
+        return;
+    }
+
+    const trailerUrl = trailer.site === "YouTube"
+        ? `https://www.youtube-nocookie.com/embed/${encodeURIComponent(trailer.key)}?autoplay=1&rel=0`
+        : `https://player.vimeo.com/video/${encodeURIComponent(trailer.key)}?autoplay=1`;
+    frame.title = trailer.name || `${trailer.type} for this movie`;
+    section.hidden = false;
+
+    button.addEventListener("click", () => {
+        frame.src = trailerUrl;
+        if (typeof dialog.showModal === "function") {
+            dialog.showModal();
+        } else {
+            dialog.setAttribute("open", "");
+        }
+    });
+    closeButton.addEventListener("click", () => {
+        if (typeof dialog.close === "function") dialog.close();
+        else dialog.removeAttribute("open");
+    });
+    dialog.addEventListener("click", event => {
+        if (event.target === dialog && typeof dialog.close === "function") dialog.close();
+    });
+    dialog.addEventListener("close", () => frame.removeAttribute("src"));
+}
+
+async function loadMovieCredits(movieId) {
+    try {
+        renderMovieCredits(await getTmdbMovieExtra(movieId, "credits"));
+    } catch (error) {
+        console.warn(`Could not load credits for movie ${movieId}:`, error);
+        document.getElementById("movieCastSection")?.setAttribute("hidden", "");
+        document.getElementById("movieDirectorField")?.setAttribute("hidden", "");
+    }
+}
+
+async function loadMovieVideos(movieId) {
+    try {
+        const videos = await getTmdbMovieExtra(movieId, "videos");
+        renderMovieTrailer(videos?.results);
+    } catch (error) {
+        console.warn(`Could not load videos for movie ${movieId}:`, error);
+        document.getElementById("movieTrailerSection")?.setAttribute("hidden", "");
+    }
+}
+
 
 // =========================
 // GET TRENDING MOVIES
@@ -2399,6 +2609,8 @@ async function getMovieDetails() {
     const moviePoster = document.getElementById("moviePoster");
     const movieRating = document.getElementById("movieRating");
     const movieDate = document.getElementById("movieDate");
+    const movieRuntime = document.getElementById("movieRuntime");
+    const movieVoteCount = document.getElementById("movieVoteCount");
     const movieGenres = document.getElementById("movieGenres");
     const movieOverview = document.getElementById("movieOverview");
     const movieAvailability = document.getElementById("movieAvailability");
@@ -2449,12 +2661,32 @@ async function getMovieDetails() {
         }
 
         moviePoster.alt = movie.title;
-        movieRating.textContent = `★ ${Number(movie.vote_average || 0).toFixed(1)}`;
-        movieDate.textContent = movie.release_date || "Release date unavailable";
-        movieGenres.textContent = movie.genres?.map(genre => genre.name).join(" • ") || "Genres unavailable";
+        const voteAverage = Number(movie.vote_average);
+        movieRating.textContent = Number.isFinite(voteAverage)
+            ? `★ ${voteAverage.toFixed(1)}`
+            : "★ Rating unavailable";
+        movieDate.textContent = formatMovieReleaseDate(movie.release_date);
+        if (movieRuntime) movieRuntime.textContent = formatMovieRuntime(movie.runtime);
+        const voteCount = Number(movie.vote_count);
+        if (movieVoteCount) {
+            movieVoteCount.hidden = !Number.isFinite(voteCount) || voteCount <= 0;
+            movieVoteCount.textContent = movieVoteCount.hidden ? "" : `${voteCount.toLocaleString()} votes`;
+        }
+        movieGenres.replaceChildren();
+        const genres = Array.isArray(movie.genres) ? movie.genres.filter(genre => genre?.name) : [];
+        genres.forEach(genre => {
+            const genreLabel = document.createElement("span");
+            genreLabel.className = "movie-genre-chip";
+            genreLabel.textContent = genre.name;
+            movieGenres.appendChild(genreLabel);
+        });
+        movieGenres.hidden = genres.length === 0;
         movieOverview.textContent = movie.overview || "No overview is available for this movie.";
         document.title = `MovieFlix - ${movie.title}`;
 
+        renderProductionCompanies(movie.production_companies);
+        loadMovieCredits(movie.id);
+        loadMovieVideos(movie.id);
         loadMovieDetailRecommendations(movie);
 
         if (watchButton) {
