@@ -262,15 +262,16 @@ async function getInternetArchiveItemMetadata(identifier) {
 
 }
 
-async function searchInternetArchiveCandidates(title) {
+async function searchInternetArchiveCandidates(title, year) {
 
     const safeTitle = String(title || "").replace(/[\\"']/g, " ").trim();
     if (!safeTitle) {
         return [];
     }
 
+    const yearClause = /^\d{4}$/.test(String(year || "")) ? ` AND year:${year}` : "";
     const params = new URLSearchParams({
-        q: `mediatype:movies AND title:"${safeTitle}"`,
+        q: `mediatype:movies AND title:"${safeTitle}"${yearClause}`,
         rows: "5",
         output: "json",
         fl: "identifier,title,description,subject,year,date"
@@ -400,7 +401,10 @@ async function resolveArchiveSourceForMovie(movie) {
     }
 
     try {
-        const resultLists = await Promise.all(titles.slice(0, 2).map(searchInternetArchiveCandidates));
+        const releaseYear = String(movie?.release_date || "").slice(0, 4);
+        const resultLists = await Promise.all(titles.slice(0, 2).map(title =>
+            searchInternetArchiveCandidates(title, releaseYear)
+        ));
         const documents = [...new Map(resultLists.flat()
             .filter(document => document?.identifier)
             .map(document => [String(document.identifier), document])).values()].slice(0, 6);
