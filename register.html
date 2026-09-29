@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieFlix - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="navbar">
+        <div class="logo">MovieFlix</div>
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNavigation">
+            <span class="menu-toggle-label">Menu</span>
+            <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="primaryNavigation">
+            <a href="index.html">Home</a>
+            <a href="index.html">Movies</a>
+            <a href="index.html#discoverMovies" data-nav-target="discoverMovies">Genres</a>
+            <a href="watchlist.html">Watchlist</a>
+            <a href="index.html#movieSearch" data-nav-target="movieSearch">Search</a>
+        </nav>
+        <div id="authNav" class="auth-nav" aria-live="polite"></div>
+    </header>
+
+    <main class="auth-page">
+        <section class="auth-panel" aria-labelledby="signupTitle">
+            <h1 id="signupTitle">Create your account</h1>
+            <p>Save movies to your personal MovieFlix watchlist.</p>
+
+            <form class="auth-form" id="signupForm">
+                <label for="signupName">
+                    Name
+                    <input id="signupName" name="name" type="text" autocomplete="name" required>
+                </label>
+                <label for="signupEmail">
+                    Email
+                    <input id="signupEmail" name="email" type="email" autocomplete="email" required>
+                </label>
+                <label for="signupPassword">
+                    Password
+                    <input id="signupPassword" name="password" type="password" autocomplete="new-password" required>
+                </label>
+                <label for="signupConfirmPassword">
+                    Confirm Password
+                    <input id="signupConfirmPassword" name="confirmPassword" type="password" autocomplete="new-password" required>
+                </label>
+                <button class="auth-submit" id="signupSubmit" data-auth-submit data-loading-label="Creating account..." type="submit">Sign Up</button>
+            </form>
+            <p class="auth-message" id="signupStatus" aria-live="polite"></p>
+            <p class="auth-switch">Already have an account? <a href="login.html">Log in</a></p>
+        </section>
+    </main>
+
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="nav.js"></script>
+</body>
+</html>

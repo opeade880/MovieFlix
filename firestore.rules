@@ -1,0 +1,43 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /users/{userId}/watchlist/{movieId} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    match /movies/{movieId}/reviews/{reviewId} {
+      allow read: if true;
+
+      allow create: if request.auth != null
+        && request.auth.uid == reviewId
+        && request.resource.data.uid == request.auth.uid
+        && request.resource.data.movieId == movieId
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 2000
+        && request.resource.data.userEmail is string
+        && request.resource.data.createdAt is timestamp;
+
+      allow update: if request.auth != null
+        && request.auth.uid == reviewId
+        && resource.data.uid == request.auth.uid
+        && request.resource.data.uid == resource.data.uid
+        && request.resource.data.movieId == resource.data.movieId
+        && request.resource.data.rating is int
+        && request.resource.data.rating >= 1
+        && request.resource.data.rating <= 5
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 2000
+        && request.resource.data.userEmail is string;
+
+      allow delete: if request.auth != null
+        && request.auth.uid == reviewId
+        && resource.data.uid == request.auth.uid;
+    }
+  }
+}

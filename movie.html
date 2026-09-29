@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MovieFlix - Movie Details</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body class="movie-page">
+
+
+    <!-- Navbar -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            MovieFlix
+        </div>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNavigation">
+            <span class="menu-toggle-label">Menu</span>
+            <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="primaryNavigation">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="index.html">
+                Movies
+            </a>
+
+            <a href="index.html#discoverMovies" data-nav-target="discoverMovies">
+                Genres
+            </a>
+
+            <a href="watchlist.html">
+                Watchlist
+            </a>
+
+            <a href="index.html#movieSearch" data-nav-target="movieSearch">
+                Search
+            </a>
+
+        </nav>
+
+        <div id="authNav" class="auth-nav" aria-live="polite"></div>
+
+    </header>
+
+
+
+    <!-- Movie Details -->
+
+    <main class="movie-details movie-details-loading" aria-labelledby="movieTitle">
+
+        <div class="movie-backdrop" id="movieBackdrop" aria-hidden="true"></div>
+
+        <div class="movie-details-shell">
+
+            <a class="movie-back-link" href="index.html">
+                <span aria-hidden="true">←</span> Back to movies
+            </a>
+
+
+            <div class="movie-details-layout">
+
+                <div class="movie-details-poster">
+
+                    <img
+                        id="moviePoster"
+                        src=""
+                        alt=""
+                    >
+
+                </div>
+
+
+
+                <div class="movie-details-content">
+
+                    <p class="movie-details-kicker" id="movieAvailability">Loading movie details...</p>
+
+                    <h1 id="movieTitle">Loading movie details...</h1>
+
+
+                    <div class="movie-meta" aria-label="Movie information">
+
+                        <span id="movieRating">Rating pending</span>
+
+                        <span id="movieDate">Release date pending</span>
+
+                        <span id="movieGenres">Genres pending</span>
+
+                    </div>
+
+
+                    <p id="movieOverview">Loading movie information...</p>
+
+
+                    <div class="movie-actions">
+
+                        <a class="watch-btn is-unavailable" id="watchButton" aria-disabled="true">
+                            <span aria-hidden="true">▶</span> Checking Availability
+                        </a>
+
+                        <button class="details-btn watchlist-btn" type="button" disabled>
+                            ♡ Add to Watchlist
+                        </button>
+
+                    </div>
+
+                    <p class="movie-action-status" id="movieActionStatus" aria-live="polite"></p>
+
+                </div>
+
+            </div>
+
+            <section class="movie-recommendations" id="movieRecommendationsSection" hidden aria-labelledby="movieRecommendationsTitle">
+                <div class="movie-recommendations-heading">
+                    <div>
+                        <p class="movie-details-kicker">MORE LIKE THIS</p>
+                        <h2 id="movieRecommendationsTitle">You May Also Like</h2>
+                    </div>
+                </div>
+                <p class="section-status" id="movieRecommendationsStatus" aria-live="polite">Loading recommendations...</p>
+                <div class="movie-grid" id="movieRecommendationsMovies"></div>
+            </section>
+
+            <section class="movie-details-error" id="movieDetailsError" hidden aria-live="polite">
+                <p class="movie-details-kicker">MOVIE UNAVAILABLE</p>
+                <h2>We could not load this movie.</h2>
+                <p id="movieDetailsErrorMessage">Check the movie link and try again.</p>
+                <a class="details-btn" href="index.html">Return home</a>
+            </section>
+
+            <section class="reviews-section" id="reviewsSection" hidden aria-labelledby="reviewsTitle">
+                <div class="reviews-heading">
+                    <div>
+                        <p class="movie-details-kicker">COMMUNITY REVIEWS</p>
+                        <h2 id="reviewsTitle">Ratings &amp; Reviews</h2>
+                    </div>
+                    <div class="reviews-summary" id="reviewsSummary">Loading reviews...</div>
+                </div>
+
+                <p class="reviews-status" id="reviewsStatus" aria-live="polite"></p>
+
+                <div class="review-editor" id="reviewEditor">
+                    <div class="review-editor-heading">
+                        <h3 id="reviewEditorTitle">Rate this movie</h3>
+                        <p>Share your take with the MovieFlix community.</p>
+                    </div>
+
+                    <form id="reviewForm" class="review-form" hidden>
+                        <label for="reviewRating">
+                            Rating
+                            <select id="reviewRating" name="rating">
+                                <option value="5">★★★★★ 5 stars</option>
+                                <option value="4">★★★★☆ 4 stars</option>
+                                <option value="3">★★★☆☆ 3 stars</option>
+                                <option value="2">★★☆☆☆ 2 stars</option>
+                                <option value="1">★☆☆☆☆ 1 star</option>
+                            </select>
+                        </label>
+                        <label for="reviewText">
+                            Review
+                            <textarea id="reviewText" name="review" rows="4" maxlength="2000" placeholder="What did you think?" required></textarea>
+                        </label>
+                        <div class="review-form-actions">
+                            <button class="review-submit" id="reviewSubmit" type="submit">Publish Review</button>
+                            <button class="review-cancel" id="reviewCancel" type="button" hidden>Cancel</button>
+                            <button class="review-delete" id="reviewDelete" type="button" hidden>Delete Review</button>
+                        </div>
+                        <p class="review-form-status" id="reviewFormStatus" aria-live="polite"></p>
+                    </form>
+
+                    <div class="review-login-prompt" id="reviewLoginPrompt" hidden>
+                        <p>Log in to rate this movie and write a review.</p>
+                        <a class="review-login-link" href="login.html">Log In</a>
+                    </div>
+                </div>
+
+                <div class="reviews-list" id="reviewsList"></div>
+            </section>
+
+        </div>
+
+    </main>
+
+
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="nav.js"></script>
+
+</body>
+
+</html>

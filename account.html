@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MovieFlix - My Account</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="account-page">
+    <header class="navbar">
+        <div class="logo">MovieFlix</div>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNavigation">
+            <span class="menu-toggle-label">Menu</span>
+            <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="primaryNavigation">
+            <a href="index.html">Home</a>
+            <a href="index.html">Movies</a>
+            <a href="index.html#discoverMovies" data-nav-target="discoverMovies">Genres</a>
+            <a href="watchlist.html">Watchlist</a>
+            <a href="index.html#movieSearch" data-nav-target="movieSearch">Search</a>
+        </nav>
+
+        <div id="authNav" class="auth-nav" aria-live="polite"></div>
+    </header>
+
+    <main class="account-main">
+        <div class="account-shell">
+            <div class="account-heading">
+                <p class="account-kicker">MOVIEFLIX ACCOUNT</p>
+                <h1>My Account</h1>
+                <p>Manage your MovieFlix profile and saved movies.</p>
+            </div>
+
+            <section class="account-card" aria-labelledby="accountCardTitle">
+                <div class="account-card-top">
+                    <div class="account-avatar" aria-hidden="true">M</div>
+                    <div>
+                        <p class="account-kicker">PROFILE</p>
+                        <h2 id="accountCardTitle">Your MovieFlix account</h2>
+                    </div>
+                </div>
+
+                <div id="accountLoading" class="account-state" aria-live="polite">
+                    <span class="account-state-dot" aria-hidden="true"></span>
+                    Checking your account...
+                </div>
+
+                <div id="accountSignedOut" class="account-state account-state-message" hidden>
+                    <h2>Sign in to view your account</h2>
+                    <p>Your profile and personal watchlist are only available after you log in.</p>
+                    <a class="account-primary-button" href="login.html">Log In</a>
+                </div>
+
+                <div id="accountSignedIn" hidden>
+                    <div class="account-details-grid">
+                        <div class="account-detail">
+                            <span class="account-detail-label">EMAIL ADDRESS</span>
+                            <strong id="accountEmail">Loading...</strong>
+                        </div>
+                        <div class="account-detail">
+                            <span class="account-detail-label">ACCOUNT STATUS</span>
+                            <strong id="accountStatus">Loading...</strong>
+                        </div>
+                        <div class="account-detail account-watchlist-detail">
+                            <span class="account-detail-label">MY WATCHLIST</span>
+                            <strong id="watchlistCount">...</strong>
+                            <span id="watchlistCountStatus">Loading saved movies...</span>
+                        </div>
+                    </div>
+
+                    <p class="account-error" id="accountError" hidden></p>
+
+                    <div class="account-actions">
+                        <a class="account-primary-button" href="watchlist.html">View My Watchlist</a>
+                        <button class="account-secondary-button" id="accountLogout" type="button">Logout</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="account.js"></script>
+    <script type="module" src="nav.js"></script>
+</body>
+</html>

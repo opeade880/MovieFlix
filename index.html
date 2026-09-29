@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MovieFlix</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="home-page">
+
+    <!-- Navbar -->
+    <header class="navbar">
+
+        <div class="logo">
+            MovieFlix
+        </div>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNavigation">
+            <span class="menu-toggle-label">Menu</span>
+            <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="primaryNavigation">
+            <a href="index.html">Home</a>
+            <a href="index.html">Movies</a>
+            <a href="index.html#discoverMovies" data-nav-target="discoverMovies">Genres</a>
+            <a href="watchlist.html">Watchlist</a>
+            <a href="index.html#movieSearch" data-nav-target="movieSearch">Search</a>
+        </nav>
+
+        <div class="search-anchor" id="movieSearch">
+            <form class="search-form" id="movieSearchForm" role="search">
+            <input
+                id="movieSearchInput"
+                type="search"
+                placeholder="Search movies..."
+                aria-label="Search movies"
+            >
+            <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div id="authNav" class="auth-nav" aria-live="polite"></div>
+
+    </header>
+
+
+    <!-- Hero Section -->
+    <section class="hero" aria-labelledby="heroTitle">
+
+        <div class="hero-content">
+
+            <p class="hero-label">
+                MOVIEFLIX FEATURED
+            </p>
+
+            <h1 id="heroTitle">
+                Night of the Living Dead
+            </h1>
+
+            <p class="hero-description">
+                A landmark public-domain horror classic. Find your next
+                favorite from what is trending, newly released, and free to watch.
+            </p>
+
+            <div class="hero-meta" aria-label="Featured movie details">
+                <span>1968</span>
+                <span>Horror</span>
+                <span>Legal full movie</span>
+            </div>
+
+            <div class="hero-buttons">
+
+                <a class="watch-btn" href="watch.html?id=10331">
+                    <span aria-hidden="true">▶</span> Watch Now
+                </a>
+
+                <a class="details-btn" href="movie.html?id=10331">
+                    More Details
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- Search Results -->
+    <section class="movie-section search-results-section" id="searchResultsSection" hidden aria-labelledby="searchResultsTitle">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-kicker">DISCOVER</p>
+                <h2 id="searchResultsTitle">Search Results</h2>
+            </div>
+        </div>
+
+        <p class="search-status" id="searchStatus" aria-live="polite"></p>
+
+        <div class="movie-grid" id="searchResults">
+
+            <!-- Search results will be loaded here by JavaScript -->
+
+        </div>
+
+    </section>
+
+
+    <!-- Discover Movies -->
+    <section class="movie-section discovery-section" id="discoverMovies" aria-labelledby="discoveryTitle">
+
+        <div class="section-heading discovery-heading">
+            <div>
+                <p class="section-kicker">FIND YOUR NEXT FAVORITE</p>
+                <h2 id="discoveryTitle">Discover Movies</h2>
+                <p class="section-description">Explore movies by genre, rating, popularity and release date.</p>
+            </div>
+
+            <label class="discovery-sort">
+                <span>Sort By</span>
+                <select id="discoverySort" aria-label="Sort discovered movies">
+                    <option value="popularity.desc">Popular</option>
+                    <option value="vote_average.desc">Top Rated</option>
+                    <option value="primary_release_date.desc">Newest</option>
+                    <option value="primary_release_date.asc">Oldest</option>
+                    <option value="vote_count.desc">Most Voted</option>
+                </select>
+            </label>
+        </div>
+
+        <div class="discovery-filters" id="discoveryFilters" aria-label="Filter discovered movies by genre">
+            <button class="discovery-filter is-active" type="button" data-genre-id="" aria-pressed="true">All</button>
+            <button class="discovery-filter" type="button" data-genre-id="28" aria-pressed="false">Action</button>
+            <button class="discovery-filter" type="button" data-genre-id="12" aria-pressed="false">Adventure</button>
+            <button class="discovery-filter" type="button" data-genre-id="16" aria-pressed="false">Animation</button>
+            <button class="discovery-filter" type="button" data-genre-id="35" aria-pressed="false">Comedy</button>
+            <button class="discovery-filter" type="button" data-genre-id="80" aria-pressed="false">Crime</button>
+            <button class="discovery-filter" type="button" data-genre-id="99" aria-pressed="false">Documentary</button>
+            <button class="discovery-filter" type="button" data-genre-id="18" aria-pressed="false">Drama</button>
+            <button class="discovery-filter" type="button" data-genre-id="10751" aria-pressed="false">Family</button>
+            <button class="discovery-filter" type="button" data-genre-id="14" aria-pressed="false">Fantasy</button>
+            <button class="discovery-filter" type="button" data-genre-id="36" aria-pressed="false">History</button>
+            <button class="discovery-filter" type="button" data-genre-id="27" aria-pressed="false">Horror</button>
+            <button class="discovery-filter" type="button" data-genre-id="10402" aria-pressed="false">Music</button>
+            <button class="discovery-filter" type="button" data-genre-id="9648" aria-pressed="false">Mystery</button>
+            <button class="discovery-filter" type="button" data-genre-id="10749" aria-pressed="false">Romance</button>
+            <button class="discovery-filter" type="button" data-genre-id="878" aria-pressed="false">Science Fiction</button>
+            <button class="discovery-filter" type="button" data-genre-id="53" aria-pressed="false">Thriller</button>
+            <button class="discovery-filter" type="button" data-genre-id="10752" aria-pressed="false">War</button>
+            <button class="discovery-filter" type="button" data-genre-id="37" aria-pressed="false">Western</button>
+        </div>
+
+        <p class="section-status" id="discoveryStatus" aria-live="polite">Loading movies...</p>
+
+        <div class="movie-grid discovery-grid" id="discoveryMovies"></div>
+
+        <button class="load-more-button" id="discoveryLoadMore" type="button">Load More Movies</button>
+
+    </section>
+
+    <section class="movie-section history-section" aria-labelledby="continueWatchingTitle">
+
+        <div class="section-heading history-heading">
+            <div>
+                <p class="section-kicker">CONTINUE WATCHING</p>
+                <h2 id="continueWatchingTitle">Continue Watching</h2>
+            </div>
+        </div>
+
+        <p class="section-status" id="continueWatchingStatus" aria-live="polite">Sign in to see your watch progress.</p>
+        <div class="movie-grid history-grid" id="continueWatchingMovies"></div>
+
+    </section>
+
+    <section class="movie-section history-section" aria-labelledby="recentlyWatchedTitle">
+
+        <div class="section-heading history-heading">
+            <div>
+                <p class="section-kicker">RECENTLY WATCHED</p>
+                <h2 id="recentlyWatchedTitle">Recently Watched</h2>
+            </div>
+            <button class="history-clear-button" id="clearHistoryButton" type="button" hidden>Clear History</button>
+        </div>
+
+        <p class="section-status" id="recentlyWatchedStatus" aria-live="polite">Sign in to see your recent movies.</p>
+        <div class="movie-grid history-grid" id="recentlyWatchedMovies"></div>
+
+    </section>
+
+
+    <!-- Trending Movies -->
+    <section class="movie-section" aria-labelledby="trendingTitle">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-kicker">WHAT'S HOT</p>
+                <h2 id="trendingTitle">Trending Movies</h2>
+            </div>
+            <span class="section-note">Updated weekly</span>
+        </div>
+
+        <p class="section-status" id="trendingStatus" aria-live="polite">Loading trending movies...</p>
+
+        <div class="movie-grid" id="trendingMovies">
+
+            <!-- Movies will be loaded here by JavaScript -->
+
+        </div>
+
+    </section>
+
+
+    <!-- New Releases -->
+    <section class="movie-section" aria-labelledby="newTitle">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-kicker">FRESH PICKS</p>
+                <h2 id="newTitle">New Releases</h2>
+            </div>
+            <span class="section-note">Coming soon</span>
+        </div>
+
+        <p class="section-status" id="newStatus" aria-live="polite">Loading new releases...</p>
+
+        <div class="movie-grid" id="newMovies">
+
+            <!-- Movies will be loaded here by JavaScript -->
+
+        </div>
+
+    </section>
+
+
+    <!-- Watch Free Movies -->
+    <section class="movie-section legal-section" aria-labelledby="legalTitle">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-kicker">SELECTED SOURCES</p>
+                <h2 id="legalTitle">Movies With Playback Sources</h2>
+            </div>
+            <span class="section-note">Selected titles only</span>
+        </div>
+
+        <p class="section-status" id="legalStatus" aria-live="polite">Loading selected movie sources...</p>
+
+        <div class="movie-grid" id="legalMovies">
+
+            <!-- Legal movies will be loaded here by JavaScript -->
+
+        </div>
+
+    </section>
+
+
+    <!-- Popular Movies -->
+    <section class="movie-section" aria-labelledby="popularTitle">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-kicker">AUDIENCE FAVORITES</p>
+                <h2 id="popularTitle">Popular Movies</h2>
+            </div>
+            <span class="section-note">Most watched</span>
+        </div>
+
+        <p class="section-status" id="popularStatus" aria-live="polite">Loading popular movies...</p>
+
+        <div class="movie-grid" id="popularMovies">
+
+            <!-- Movies will be loaded here by JavaScript -->
+
+        </div>
+
+    </section>
+
+    <section class="movie-section recommendation-section" id="homeRecommendationsSection" hidden aria-labelledby="homeRecommendationsTitle">
+
+        <div class="section-heading">
+            <div>
+                <p class="section-kicker">FOR YOUR NEXT MOVIE NIGHT</p>
+                <h2 id="homeRecommendationsTitle">Recommended For You</h2>
+            </div>
+        </div>
+
+        <p class="section-status" id="homeRecommendationsStatus" aria-live="polite">Loading recommendations...</p>
+        <div class="movie-grid" id="homeRecommendationsMovies"></div>
+
+    </section>
+
+
+    <!-- Footer -->
+    <footer>
+
+        <p>
+            © 2026 MovieFlix. All rights reserved.
+        </p>
+
+    </footer>
+
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="nav.js"></script>
+
+</body>
+
+</html>

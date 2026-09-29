@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MovieFlix - Watch</title>
+
+    <link rel="stylesheet" href="style.css">
+
+</head>
+
+
+<body class="watch-page-body">
+
+
+    <!-- Navbar -->
+
+    <header class="navbar">
+
+        <div class="logo">
+            MovieFlix
+        </div>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNavigation">
+            <span class="menu-toggle-label">Menu</span>
+            <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="primaryNavigation">
+
+            <a href="index.html">
+                Home
+            </a>
+
+            <a href="index.html">
+                Movies
+            </a>
+
+            <a href="index.html#discoverMovies" data-nav-target="discoverMovies">
+                Genres
+            </a>
+
+            <a href="watchlist.html">
+                Watchlist
+            </a>
+
+            <a href="index.html#movieSearch" data-nav-target="movieSearch">
+                Search
+            </a>
+
+        </nav>
+
+        <div id="authNav" class="auth-nav" aria-live="polite"></div>
+
+    </header>
+
+
+
+    <!-- Watch Page -->
+
+    <main class="watch-page is-loading" aria-labelledby="watchTitle">
+
+        <div class="watch-page-shell">
+
+            <a class="watch-back-link" id="watchBackLink" href="index.html">
+                <span aria-hidden="true">←</span> Back to movie details
+            </a>
+
+            <div class="watch-page-heading">
+                <p class="watch-kicker" id="watchStatus">PREPARING PLAYER</p>
+                <p class="watch-source-label" id="watchSourceLabel"></p>
+            </div>
+
+
+            <div class="video-container" id="videoContainer" hidden>
+
+                <div class="video-frame">
+
+                    <video
+                        id="moviePlayer"
+                        controls
+                        playsinline
+                        preload="metadata"
+                    >
+
+                        <source id="movieSource" type="video/mp4">
+                        Your browser does not support the video tag.
+
+                    </video>
+
+                </div>
+
+                <p class="video-status" id="videoStatus" aria-live="polite"></p>
+
+            </div>
+
+
+            <section class="watch-unavailable" id="watchUnavailable" hidden aria-live="polite">
+                <div class="watch-state-icon" aria-hidden="true">▶</div>
+                <p class="watch-kicker">FULL PLAYBACK UNAVAILABLE</p>
+                <h1 id="watchUnavailableTitle">This movie is not currently playable.</h1>
+                <p id="watchUnavailableMessage">MovieFlix does not have a legal full-movie source for this title.</p>
+                <a class="watch-primary-link" id="unavailableDetailsLink" href="index.html">View movie details</a>
+            </section>
+
+            <section class="watch-info">
+
+                <p class="watch-kicker" id="watchAvailability">LOADING MOVIE INFORMATION</p>
+
+                <h1 id="watchTitle">Loading...</h1>
+
+                <div class="watch-meta" aria-label="Movie information">
+                    <span id="watchRating">Rating pending</span>
+                    <span id="watchDate">Release date pending</span>
+                </div>
+
+                <p id="watchDescription">Loading movie information...</p>
+
+            </section>
+
+            <section class="watch-error" id="watchError" hidden aria-live="polite">
+                <p class="watch-kicker">WATCH PAGE ERROR</p>
+                <h1 id="watchErrorTitle">We could not load this movie.</h1>
+                <p id="watchErrorMessage">Check the movie link and try again.</p>
+                <a class="watch-primary-link" href="index.html">Return home</a>
+            </section>
+
+        </div>
+
+    </main>
+
+
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="nav.js"></script>
+
+</body>
+
+</html>

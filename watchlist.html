@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>MovieFlix - Watchlist</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+
+        <div class="logo">
+            MovieFlix
+        </div>
+
+        <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primaryNavigation">
+            <span class="menu-toggle-label">Menu</span>
+            <span aria-hidden="true">☰</span>
+        </button>
+
+        <nav id="primaryNavigation">
+            <a href="index.html">Home</a>
+            <a href="index.html">Movies</a>
+            <a href="index.html#discoverMovies" data-nav-target="discoverMovies">Genres</a>
+            <a href="watchlist.html">Watchlist</a>
+            <a href="index.html#movieSearch" data-nav-target="movieSearch">Search</a>
+        </nav>
+
+        <div id="authNav" class="auth-nav" aria-live="polite"></div>
+
+    </header>
+
+
+    <!-- Watchlist -->
+    <main class="watchlist-page">
+
+        <section class="movie-section">
+
+            <h1>Your Watchlist</h1>
+
+            <p class="watchlist-status" id="watchlistStatus" aria-live="polite"></p>
+
+            <div class="watchlist-grid" id="watchlistMovies">
+
+                <!-- Saved movies will be loaded here by JavaScript -->
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <script type="module" src="script.js"></script>
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="nav.js"></script>
+
+</body>
+
+</html>
